@@ -19,14 +19,43 @@ const { NotImplementedError } = require('../extensions/index.js');
  * reverseMachine.decrypt('AEIHQX SX DLLU!', 'alphonse') => '!NWAD TA KCATTA'
  * 
  */
-class VigenereCipheringMachine {
-  encrypt() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+ class VigenereCipheringMachine {
+  constructor(direct = true) {
+    this.direct  = direct ;
   }
-  decrypt() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  encrypt(input, key) {
+    if (input === undefined || key === undefined) throw Error('Incorrect arguments!')
+    const alphabet  = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+    let output = []
+    while (key.length < input.length) {
+    key += key
+    }
+    key = key.slice(0, input.length).toUpperCase().split('')
+    input = input.toUpperCase().split('')
+    let j = 0 
+    for (let i = 0; i < input.length; i++) {
+    if (!alphabet.includes(input[i])) output.push(input[i])
+    else output.push(alphabet[(alphabet.indexOf(input[i]) + alphabet.indexOf(key[j++])) % 26])
+    }
+    if (this.direct) return output.join('')
+    else return output.reverse().join('')
+  }
+  decrypt(input, key) {
+    if (input === undefined || key === undefined) throw Error('Incorrect arguments!')
+    const alphabet  = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+    let output = []
+    while (key.length < input.length) {
+    key += key
+    }
+    key = key.slice(0, input.length).toUpperCase().split('')
+    input = input.toUpperCase().split('')
+    let j = 0 
+    for (let i = 0; i < input.length; i++) {
+    if (!alphabet.includes(input[i])) output.push(input[i])
+    else output.push(alphabet[(alphabet.indexOf(input[i]) + 26 - alphabet.indexOf(key[j++])) % 26])
+    }
+    if (this.direct) return output.join('')
+    else return output.reverse().join('')
   }
 }
 
